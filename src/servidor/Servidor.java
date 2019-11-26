@@ -1,4 +1,4 @@
-package servidor;
+package server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,15 +11,14 @@ import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import servidor.Servidor;
+import controle.Test;
 
 public class Servidor extends Thread {
-	
+
 	private static ArrayList<BufferedWriter> clientes;
 	private static ServerSocket server;
 	private String nome;
@@ -27,7 +26,16 @@ public class Servidor extends Thread {
 	private InputStream in;
 	private InputStreamReader inr;
 	private BufferedReader bfr;
+	//alterado por luan
+	private static Test controle=new Test();
+	//alterado por luan
 	
+	/**
+	 * M�todo construtor
+	 * 
+	 * @param com
+	 *            do tipo Socket
+	 */
 	public Servidor(Socket con) {
 		this.con = con;
 		try {
@@ -44,7 +52,9 @@ public class Servidor extends Thread {
 	private synchronized void removeCliente(BufferedWriter bfw) {
 		clientes.remove(bfw);
 	}
-	
+	/**
+	 * M�todo run
+	 */
 	public void run() {
 
 		try {
@@ -59,8 +69,8 @@ public class Servidor extends Thread {
 
 			while (!"Sair".equalsIgnoreCase(msg) && msg != null) {
 				msg = bfr.readLine();
-				//System.out.println(msg);
-				System.out.println(msg);
+				sendToAll(bfw, msg);
+				mensagensJogo(bfw, msg);
 			}
 
 		} catch (Exception e) {
@@ -68,7 +78,72 @@ public class Servidor extends Thread {
 
 		}
 	}
+
 	
+	private void mensagensJogo(BufferedWriter bwSaida, String msg) throws IOException {
+
+		BufferedWriter bwS, bwP = null;
+		String retornoBusca=null;
+		try {
+
+			 int linha = Integer.parseInt((Character.toString(msg.charAt(0))));
+			 int coluna = Integer.parseInt((Character.toString(msg.charAt(2)))); 
+			 retornoBusca=controle.getAsciiArt(linha, coluna);
+			 
+		} catch (Exception e) {
+			retornoBusca="ERRO";
+		}
+		 if(retornoBusca==null) {
+			 retornoBusca="Posicao Ivalido"; 
+		 }
+		 
+		for (BufferedWriter bw : clientes) {
+			bwS =  bw;
+			try{
+			bw.write(">> "+retornoBusca+" \r\n");
+			
+			bw.flush();
+			}catch(Exception e){
+				bwP=bwS;
+			}
+					
+		}
+		
+	}
+	
+	/***
+	 * M�todo usado para enviar mensagem para todos os clients
+	 * 
+	 * @param bwSaida
+	 *            do tipo BufferedWriter
+	 * @param msg
+	 *            do tipo String
+	 * @throws IOException
+	 */
+	public void sendToAll(BufferedWriter bwSaida, String msg) throws IOException {
+		BufferedWriter bwS, bwP = null;
+
+		for (BufferedWriter bw : clientes) {
+			bwS =  bw;
+			if (!(bwSaida == bwS)) {
+				try{
+				bw.write(nome + " -> " + msg + "\r\n");
+				bw.flush();
+				}catch(Exception e){
+					bwP=bwS;
+				}
+			}			
+		}
+		if(bwP !=null){
+			this.removeCliente(bwP);
+		}
+	}
+
+	/***
+	 * M�todo main
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		try {
@@ -94,4 +169,4 @@ public class Servidor extends Thread {
 			e.printStackTrace();
 		}
 	}// Fim do m�todo main
-}
+} // Fim da classe
