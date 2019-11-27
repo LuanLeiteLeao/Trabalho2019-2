@@ -20,6 +20,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
+import cliente.Cliente;
+
 import com.jgoodies.forms.layout.FormSpecs;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.GroupLayout;
@@ -31,6 +33,7 @@ import java.awt.FlowLayout;
 
 public class TelaPrincipal {
 	private JFrame frmJogoDaMemoria;
+	private Cliente c;
 	
 	/**
 	 * Launch the application.
@@ -71,7 +74,7 @@ public class TelaPrincipal {
 		frmJogoDaMemoria.getContentPane().add(topo, BorderLayout.NORTH);
 		
 		//instancia um objeto do tipo Matrix, a onde tem os cartões do jogo da memoria
-		Matrix panel = new Matrix();
+		Matrix panel = new Matrix(4,c);
 		frmJogoDaMemoria.getContentPane().add(panel, BorderLayout.CENTER);
 		
 		//empacota os Frame

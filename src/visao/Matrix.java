@@ -12,29 +12,30 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import controle.Gerenciador;
+import cliente.Cliente;
+//import controle.Gerenciador;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 
 public class Matrix extends JPanel {
 	private int size;
-	private Gerenciador gerent;
+//	private Gerenciador gerent;
 	private int clique=0;
 	private  List<Botton> paresJaEncotrados = new ArrayList<Botton>();
 	public List<Botton> pares = new ArrayList<Botton>();
 	private List<Botton> bottons = new ArrayList<Botton>();
-	
-	public Matrix() {
+
+	public Matrix(int quadratico, Cliente c) {
 		
-		gerent = new Gerenciador ();
+	//	gerent = new Gerenciador ();
 		
 		
 		this.setLayout(this.creatSizeMigLayout(4));
 	
 		
-		for(int i=0;i<4;i++) {
-			for(int j=0;j<4;j++) {
-				Botton button = new Botton(i, j,this.gerent,this);
+		for(int i=0;i<quadratico;i++) {
+			for(int j=0;j<quadratico;j++) {
+				Botton button = new Botton(i, j,this,c);
 				
 				bottons.add(button);
 				
@@ -45,6 +46,12 @@ public class Matrix extends JPanel {
 		
 		
 		
+	}
+	
+	public JButton getBotao(int lin, int col) {
+		int posicao = lin*4+col;
+		
+		return bottons.get(posicao);
 	}
 
 	
@@ -91,16 +98,16 @@ public class Matrix extends JPanel {
 	}
 	
 
-	public void isAcertei() {
-		
-		if(pares.get(0).getText() == pares.get(1).getText()) {
-			JOptionPane.showMessageDialog(null,"ACERTOUU");
-			pares.get(0).setEcontrado(true);
-			pares.get(1).setEcontrado(true);
-			
-		}
-	}
-	
+//	public void isAcertei() {
+//		
+//		if(pares.get(0).getText() == pares.get(1).getText()) {
+//			JOptionPane.showMessageDialog(null,"ACERTOUU");
+//			pares.get(0).setEcontrado(true);
+//			pares.get(1).setEcontrado(true);
+//			
+//		}
+//	}
+//	
 
 	public  void virarBotoes() {
 		

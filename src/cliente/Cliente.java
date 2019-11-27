@@ -26,6 +26,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import cliente.Cliente;
+import net.miginfocom.swing.MigLayout;
 import visao.Matrix;
 
 public class Cliente extends JFrame implements ActionListener, KeyListener {
@@ -45,6 +46,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 	private JTextField txtPorta;
 	private JTextField txtNome;
 	private JFrame frmJogoDaMemoria;
+	private Matrix neo;
 	
 	public Cliente() throws IOException {
 		JLabel lblMessage = new JLabel("Verificar!");
@@ -60,30 +62,13 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		frmJogoDaMemoria.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmJogoDaMemoria.getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		
-		
-		JLabel topo = new JLabel("novo");
-		frmJogoDaMemoria.getContentPane().add(topo, BorderLayout.NORTH);
-		
-		//instancia um objeto do tipo Matrix, a onde tem os cartões do jogo da memoria
-		Matrix panel = new Matrix();
-		frmJogoDaMemoria.getContentPane().add(panel, BorderLayout.CENTER);
-		
-		//empacota os Frame
-		frmJogoDaMemoria.pack(); 	
-		
-
-		//Setar o tamnho da tela 
-		// Resolução da tela
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Dimension d = tk.getScreenSize();
-		
-		//"A resolução da sua máquina é: " +d.width + " x " +d.height);		
-		frmJogoDaMemoria.setSize(d.width,d.height);
+		 neo = new Matrix(4,this);
+		frmJogoDaMemoria.getContentPane().add(neo);
 		frmJogoDaMemoria.setVisible(true);
 		
-		
 	}
+	
+	
 
 	
 	public void conectar() throws IOException {
@@ -96,21 +81,33 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		bfw.flush();
 	}
 	
+	
+	
 	public void escutar() throws IOException {
 
 		InputStream in = socket.getInputStream();
 		InputStreamReader inr = new InputStreamReader(in);
 		BufferedReader bfr = new BufferedReader(inr);
 		String msg = "";
+		String info = "";
+		String linha = "";
+		String coluna = "";
 
 		while (!"Sair".equalsIgnoreCase(msg))
 
 			if (bfr.ready()) {
 				msg = bfr.readLine();
-				if (msg.equals("Sair"))
-					texto.append("Servidor caiu! \r\n");
-				else
-					texto.append(msg + "\r\n");
+				String[] split = msg.split(":");
+				if(split[0].equalsIgnoreCase("Coord")) {
+					info = split[1];
+					linha = split[2];
+					coluna = split[3];
+					
+					JButton jb = neo.getBotao(Integer.parseInt(linha), Integer.parseInt(coluna));
+					jb.setText(info);
+					
+				}
+				
 			}
 	}
 	
@@ -122,11 +119,30 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		ou.close();
 		socket.close();
 	}
+
+	public void enviarMensagem(String msg) throws IOException {
+
+		if (msg.equals("Sair")) {
+			bfw.write("Desconectado \r\n");
+	
+		} else {
+			System.out.println(msg);
+			bfw.write(msg+"\r\n");
+			
+		}
+		bfw.flush();
+		
+//		return escutar();
+		//txtMsg.setText("");
+		 
+	}
+	
 	
 	
 	
 	
 	@Override
+
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		

@@ -7,23 +7,27 @@ import java.text.Normalizer.Form;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import controle.Gerenciador;
+import cliente.Cliente;
+
+//import controle.Gerenciador;
 
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class Botton extends JButton{
 	private int[] Coordinate= {0,0};
-	private Gerenciador gerent;
+//	private Gerenciador gerent;
 	private boolean isEntraUmaVez=true;
 	private boolean encontrado = false;
 	private Matrix matrix;
+	private Cliente cc;
 	
-	public Botton(int row,int colum,Gerenciador gerente,Matrix matrix) {
-		 
+	public Botton(int row,int colum,Matrix matrix, Cliente c) {
+		cc = c; 
 		this.matrix = matrix;
-		this.gerent=gerente;
+		//this.gerent=gerente;
 		listern(this);
 		
 		
@@ -63,10 +67,7 @@ public class Botton extends JButton{
 					
 					//guardar valor clicado
 					int [] aux = {Coordinate[0],Coordinate[1]};
-					
-					
-					
-					
+				
 					//caso este contador esteja valendo 2, que dizer q foi clicado duas vezes
 					if(matrix.euFuiClicado2vezes()){
 						
@@ -75,30 +76,29 @@ public class Botton extends JButton{
 						
 						
 					}
-					
-					
-					
-					
+				
 					//so entra uma vez
 					isEntraUmaVez=false;
 					
 					a.isIcon(false);
 					//busca uma AsciiArt nesta cordenada, que sera posteriomente colocada no botão
-					a.setText(gerent.getAsciiArt(Coordinate[0],Coordinate[1]));
+					//a.setText(gerent.getAsciiArt(Coordinate[0],Coordinate[1]));
 					//System.out.println(gerent.getAsciiArt(Coordinate[0],Coordinate[1]));
+					matrix.pares.add(a);
+					//matrix.isAcertei();
+//					a.setText("");
+					try {
+						cc.enviarMensagem(getCoordinate());
 						
-				
-					matrix.pares.add(a);	
-					
-					
-					
-					matrix.isAcertei();
-				
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 								
 				
 				
-							}
+			}
 		};
 		
 		
@@ -107,10 +107,17 @@ public class Botton extends JButton{
 	}
 
 	//retorna a possicao do botao na matriz 	
-	public int[] getCoordinate() {
+	public String getCoordinate() {
+		String msg = String.format("%d.%d",Coordinate[0],Coordinate[1]);
+	
+//		int x,y;
+//		
+//		x = Coordinate[0];
+//		y = Coordinate[1];
+//		
+//		msg = (x+"."+y);
 		
-		
-		return this.Coordinate; 
+		return msg; 
 	}
 	
 	

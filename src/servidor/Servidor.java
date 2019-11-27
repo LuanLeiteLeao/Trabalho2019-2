@@ -1,4 +1,4 @@
-package server;
+package servidor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -70,6 +70,7 @@ public class Servidor extends Thread {
 			while (!"Sair".equalsIgnoreCase(msg) && msg != null) {
 				msg = bfr.readLine();
 				sendToAll(bfw, msg);
+				System.out.println(msg);
 				mensagensJogo(bfw, msg);
 			}
 
@@ -83,11 +84,13 @@ public class Servidor extends Thread {
 	private void mensagensJogo(BufferedWriter bwSaida, String msg) throws IOException {
 
 		BufferedWriter bwS, bwP = null;
+		int linha = -1;
+		int coluna = -1;
 		String retornoBusca=null;
 		try {
 
-			 int linha = Integer.parseInt((Character.toString(msg.charAt(0))));
-			 int coluna = Integer.parseInt((Character.toString(msg.charAt(2)))); 
+			 linha = Integer.parseInt((Character.toString(msg.charAt(0))));
+			 coluna = Integer.parseInt((Character.toString(msg.charAt(2)))); 
 			 retornoBusca=controle.getAsciiArt(linha, coluna);
 			 
 		} catch (Exception e) {
@@ -100,7 +103,7 @@ public class Servidor extends Thread {
 		for (BufferedWriter bw : clientes) {
 			bwS =  bw;
 			try{
-			bw.write(">> "+retornoBusca+" \r\n");
+			bw.write("Coord:"+retornoBusca+":"+linha+":"+coluna+"\r\n");
 			
 			bw.flush();
 			}catch(Exception e){
