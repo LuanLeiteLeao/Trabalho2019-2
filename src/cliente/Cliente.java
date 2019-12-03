@@ -48,8 +48,19 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 	private JFrame frmJogoDaMemoria;
 	private Matrix neo;
 	private Integer pontos = 0;
-	String verificaAcertoou ="caraca";
+	private String ganhou;
+	private JLabel win;
+	String verificaAcertoouinfo ="caraca";
+	String verificaAcertooulin ="caraca";
+	String verificaAcertooucol ="caraca";
 	JLabel placar;
+	JButton vencedor;
+	JButton definirVitoria;
+	/**
+	 * @wbp.nonvisual location=1917,1059
+	 */
+	private final JButton button = new JButton("New button");
+	private JButton btnPontos;
 	
 
 	public Cliente() throws IOException {
@@ -70,12 +81,26 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		placar.setSize(100,50);
 		placar.setHorizontalAlignment(pontos);
 		frmJogoDaMemoria.getContentPane().add(placar, "North");
+		placar.setHorizontalAlignment(pontos);
+		
+//		vencedor = new JButton("Mandar Pontos");
+//		frmJogoDaMemoria.getContentPane().add(vencedor, "South");
+//		vencedor.addActionListener(new vencedor());
+//		definirVitoria = new JButton("Ganhador");
+//		frmJogoDaMemoria.getContentPane().add(definirVitoria,"South");
+//		definirVitoria.addActionListener(new Ganhador());
+		
+		
 		
 		 neo = new Matrix(4,this);
 		frmJogoDaMemoria.getContentPane().add(neo, "Center");
+		
+//		btnPontos = new JButton("Pontos");
+//		frmJogoDaMemoria.getContentPane().add(btnPontos, BorderLayout.WEST);
+//		btnPontos.addActionListener(new vencedor());
 		frmJogoDaMemoria.setSize(getMaximumSize());
 		frmJogoDaMemoria.setVisible(true);
-		
+//		
 	}
 	
 	
@@ -106,12 +131,21 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		String linha = "";
 		String coluna = "";
 		
+		
+		
 
 		while (!"Sair".equalsIgnoreCase(msg))
 
 			if (bfr.ready()) {
 				msg = bfr.readLine();
 				String[] split = msg.split(":");
+				
+				if(split[0].equalsIgnoreCase("vencedor")) {
+					info = split[1];
+					JLabel jbvencedor = new JLabel(info);
+					frmJogoDaMemoria.getContentPane().add(jbvencedor, BorderLayout.EAST);
+				}
+				
 				if(split[0].equalsIgnoreCase("Coord")) {
 					info = split[1];
 					linha = split[2];
@@ -119,11 +153,15 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 					
 					System.out.println("info"+info);
 					
-					if(info.equals(verificaAcertoou)) {
+					if(info.equals(verificaAcertoouinfo)) {
 						setPontos(2);
+						neo.setbotao(Integer.parseInt(linha), Integer.parseInt(coluna));
+						neo.setbotao(Integer.parseInt(verificaAcertooulin), Integer.parseInt(verificaAcertooucol));
 					}else {
-						verificaAcertoou = info.toString();
-						System.out.println("entrous "+verificaAcertoou);
+						verificaAcertoouinfo = info;
+						verificaAcertooulin = linha;
+						verificaAcertooucol = coluna;
+					//	System.out.println("entrous "+verificaAcertoou);
 								
 					}
 					
@@ -208,5 +246,37 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		Cliente app = new Cliente();
 		app.conectar();
 		app.escutar();
+	}
+	
+	private class vencedor implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				bfw.flush();
+				bfw.write("Pontos:"+pontos.toString()+":"+txtNome.getText()+"\r\n");
+				bfw.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+		
+	}
+	private class Ganhador implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				bfw.flush();
+				bfw.write("Ganhou \r\n");
+				bfw.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
 	}
 }

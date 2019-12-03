@@ -1,5 +1,7 @@
 package visao;
 
+
+
 import java.awt.Button;
 import java.awt.Image;
 import java.text.Normalizer.Form;
@@ -9,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import cliente.Cliente;
+import controle.AsciiArt;
+import controle.Test;
 
 //import controle.Gerenciador;
 
@@ -22,8 +26,14 @@ public class Botton extends JButton{
 //	private Gerenciador gerent;
 	private boolean isEntraUmaVez=true;
 	private boolean encontrado = false;
+	
+
 	private Matrix matrix;
 	private Cliente cc;
+	private Test gc;
+	private AsciiArt aa;
+	private String[] aux;
+	private String[] aux2;
 	
 	public Botton(int row,int colum,Matrix matrix, Cliente c) {
 		cc = c; 
@@ -45,6 +55,13 @@ public class Botton extends JButton{
 		
 		
 	}
+	public boolean isEncontrado() {
+		return encontrado;
+	}
+
+	public void setEncontrado(boolean encontrado) {
+		this.encontrado = encontrado;
+	}
 		
 	public void isIcon(boolean state) {
 		if(state) {
@@ -63,20 +80,21 @@ public class Botton extends JButton{
 	private void listern(Botton a) {
 		ActionListener event = new ActionListener() {
 			public void actionPerformed(ActionEvent args) {
-				//String[] split = getCoordinate().split(".");
 				
 				
 				if(isEntraUmaVez) {
 					
 					//guardar valor clicado
-					int [] aux = {Coordinate[0],Coordinate[1]};
-				
-					//caso este contador esteja valendo 2, que dizer q foi clicado duas vezes
-					if(matrix.euFuiClicado2vezes()){
-						matrix.virarBotoes();
-					}
 					
+					//caso este contador esteja valendo 2, que dizer q foi clicado duas vezes
+					
+					
+						if(matrix.euFuiClicado2vezes()){
+						
+							matrix.virarBotoes();
+						}
 					//so entra uma vez
+					
 					isEntraUmaVez=false;
 					
 					a.isIcon(false);

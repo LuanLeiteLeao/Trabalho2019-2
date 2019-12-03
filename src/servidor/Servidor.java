@@ -26,6 +26,7 @@ public class Servidor extends Thread {
 	private InputStream in;
 	private InputStreamReader inr;
 	private BufferedReader bfr;
+	private String vencendor;
 	//alterado por luan
 	private static Test controle=new Test();
 	//alterado por luan
@@ -66,18 +67,39 @@ public class Servidor extends Thread {
 			//chama metodo com modificador synchronized para garantir acesso exclusivo
 			this.addCliente(bfw);
 			nome = msg = bfr.readLine();
+			String[] split = msg.split(":");
 
 			while (!"Sair".equalsIgnoreCase(msg) && msg != null) {
 				msg = bfr.readLine();
 				sendToAll(bfw, msg);
 				System.out.println(msg);
 				mensagensJogo(bfw, msg);
+				if(split[0].equalsIgnoreCase("pontos")) {
+					vencendor = vencendo(split[1],split[2]);
+					System.out.println(vencendor);
+				}
+				if(msg.equalsIgnoreCase("ganhou")) {
+					bfw.write("Vencedor:"+vencendor+"\r\n");
+				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
+	}
+	
+	private String vencendo(String pontos, String nome) {
+		Integer pontosvencedor = 0;
+		String nomevencedor = "";
+		
+		
+		if(pontosvencedor < Integer.parseInt(pontos)) {
+			pontosvencedor = Integer.parseInt(pontos);
+			nomevencedor = nome;
+		}
+		
+		return "Vencedor é:"+nomevencedor+" com "+pontosvencedor+" pontos";
 	}
 
 	

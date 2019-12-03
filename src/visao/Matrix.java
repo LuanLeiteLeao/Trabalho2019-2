@@ -1,6 +1,7 @@
 package visao;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Panel;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import cliente.Cliente;
+import controle.Test;
 //import controle.Gerenciador;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
@@ -24,6 +26,7 @@ public class Matrix extends JPanel {
 	private  List<Botton> paresJaEncotrados = new ArrayList<Botton>();
 	public List<Botton> pares = new ArrayList<Botton>();
 	private List<Botton> bottons = new ArrayList<Botton>();
+	private Test t;
 
 	public Matrix(int quadratico, Cliente c) {
 		
@@ -53,6 +56,13 @@ public class Matrix extends JPanel {
 		
 		return bottons.get(posicao);
 	}
+	
+	public void setbotao(int lin, int col) {
+		int posicao = lin+col*4;		
+		Botton b = bottons.get(posicao);
+		b.setEcontrado(true);
+		b.setBackground(Color.GREEN);
+	}
 
 	
 	private MigLayout creatSizeMigLayout(int size) {
@@ -75,6 +85,15 @@ public class Matrix extends JPanel {
 		
 		
 		return layout;
+	}
+	
+	public boolean saoIguais(int x1,int y1,int x2,int y2) {
+		
+		if(t.getAsciiArt(x1, y1).equals(t.getAsciiArt(x2, y2))) {
+			return true;
+		}
+		else return false;
+		
 	}
 	
 	public boolean euFuiClicado2vezes() {
