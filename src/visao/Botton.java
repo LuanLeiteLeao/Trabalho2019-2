@@ -3,6 +3,7 @@ package visao;
 import java.awt.Button;
 import java.awt.Image;
 import java.text.Normalizer.Form;
+import java.util.Spliterator;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -37,30 +38,32 @@ public class Botton extends JButton{
 		//esse metodo contrutor tem a responsabilidade de guardas a possicao de um botao
 		this.Coordinate[0]=colum;
 		this.Coordinate[1]=row;
-
+		
 		
 		
 		isIcon(true);
 		
 		
 	}
-
+		
 	public void isIcon(boolean state) {
 		if(state) {
 
-			ImageIcon icon = new ImageIcon("/home/luanleiteleao/eclipse-workspace/JogoDaMemoria/imag/ico1.jpg"); //Somente esta linha foi alterada
-			icon.setImage(icon.getImage().getScaledInstance(50, 50, 100));
+			ImageIcon icon = new ImageIcon("imag/fundo.jpg"); //Somente esta linha foi alterada
+			icon.setImage(icon.getImage().getScaledInstance(100,100,100));
+			
 			setIcon(icon);
 		}else {
 			setIcon(null);
-			
-		}
 		
-	}
-
+		}
+			
+	}	
+		
 	private void listern(Botton a) {
 		ActionListener event = new ActionListener() {
 			public void actionPerformed(ActionEvent args) {
+				//String[] split = getCoordinate().split(".");
 				
 				
 				if(isEntraUmaVez) {
@@ -70,13 +73,9 @@ public class Botton extends JButton{
 				
 					//caso este contador esteja valendo 2, que dizer q foi clicado duas vezes
 					if(matrix.euFuiClicado2vezes()){
-						
-						
 						matrix.virarBotoes();
-						
-						
 					}
-				
+					
 					//so entra uma vez
 					isEntraUmaVez=false;
 					

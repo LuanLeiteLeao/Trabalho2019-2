@@ -47,12 +47,16 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 	private JTextField txtNome;
 	private JFrame frmJogoDaMemoria;
 	private Matrix neo;
+	private Integer pontos = 0;
+	String verificaAcertoou ="caraca";
+	JLabel placar;
 	
+
 	public Cliente() throws IOException {
 		JLabel lblMessage = new JLabel("Verificar!");
 		txtIP = new JTextField("127.0.0.1");
 		txtPorta = new JTextField("12345");
-		txtNome = new JTextField("Cliente");
+		txtNome = new JTextField("Vida Loka");
 		Object[] texts = { lblMessage, txtIP, txtPorta, txtNome };
 		JOptionPane.showMessageDialog(null, texts);
 		
@@ -61,9 +65,15 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		frmJogoDaMemoria.setTitle("Jogo Da Memoria");
 		frmJogoDaMemoria.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmJogoDaMemoria.getContentPane().setLayout(new BorderLayout(0, 0));
+		placar = new JLabel();
+		placar.setText(pontos.toString());
+		placar.setSize(100,50);
+		placar.setHorizontalAlignment(pontos);
+		frmJogoDaMemoria.getContentPane().add(placar, "North");
 		
 		 neo = new Matrix(4,this);
-		frmJogoDaMemoria.getContentPane().add(neo);
+		frmJogoDaMemoria.getContentPane().add(neo, "Center");
+		frmJogoDaMemoria.setSize(getMaximumSize());
 		frmJogoDaMemoria.setVisible(true);
 		
 	}
@@ -83,6 +93,9 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 	
 	
 	
+	/**
+	 * @throws IOException
+	 */
 	public void escutar() throws IOException {
 
 		InputStream in = socket.getInputStream();
@@ -92,6 +105,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		String info = "";
 		String linha = "";
 		String coluna = "";
+		
 
 		while (!"Sair".equalsIgnoreCase(msg))
 
@@ -103,8 +117,20 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 					linha = split[2];
 					coluna = split[3];
 					
+					System.out.println("info"+info);
+					
+					if(info.equals(verificaAcertoou)) {
+						setPontos(2);
+					}else {
+						verificaAcertoou = info.toString();
+						System.out.println("entrous "+verificaAcertoou);
+								
+					}
+					
 					JButton jb = neo.getBotao(Integer.parseInt(linha), Integer.parseInt(coluna));
 					jb.setText(info);
+					placar.setText(pontos.toString());
+					frmJogoDaMemoria.getContentPane().repaint();
 					
 				}
 				
@@ -135,6 +161,17 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 //		return escutar();
 		//txtMsg.setText("");
 		 
+	}
+	
+	public Integer getPontos() {
+		return pontos;
+	}
+
+
+
+
+	public void setPontos(Integer pontos) {
+		this.pontos = this.pontos + pontos;
 	}
 	
 	

@@ -43,13 +43,13 @@ public class Matrix extends JPanel {
 			}
 		}
 		
-		
+	
 		
 		
 	}
 	
 	public JButton getBotao(int lin, int col) {
-		int posicao = lin*4+col;
+		int posicao = lin+col*4;
 		
 		return bottons.get(posicao);
 	}

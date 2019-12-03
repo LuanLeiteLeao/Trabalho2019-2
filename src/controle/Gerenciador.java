@@ -115,11 +115,11 @@ abstract class Gerenciador  {
 				|| ((pos2[0]== paresValidar.get(0)[0] && pos2[1]== paresValidar.get(0)[1] ) && (pos1[0]== paresValidar.get(1)[0] && pos1[1]== paresValidar.get(1)[1] ))	) {
 				 
 				encontrado = true;
-				System.out.println("ACHEIIIIIIII");
+				//System.out.println("ACHEIIIIIIII");
 				
 			}
 			else {
-				System.out.println("Errei");
+				//System.out.println("Errei");
 			}
 		}
 		

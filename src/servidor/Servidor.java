@@ -81,6 +81,13 @@ public class Servidor extends Thread {
 	}
 
 	
+	/**
+	 * @param bwSaida
+	 * @param msg
+	 * @throws IOException
+	 * 
+	 * 
+	 */
 	private void mensagensJogo(BufferedWriter bwSaida, String msg) throws IOException {
 
 		BufferedWriter bwS, bwP = null;
